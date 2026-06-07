@@ -1,42 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Retirement Calculator</title>
-<meta name="description" content="Plan how much you need for retirement savings.">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>은퇴 자금 인출 전략 계산기 | 노후 자금 유지 기간 예측</title>
+    <meta name="description" content="모아둔 은퇴 자산에서 매달 생활비를 인출할 때, 투자 수익률과 물가상승률을 고려하여 자산이 고갈되지 않는 안전 기간을 계산하세요.">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div class="max-w-4xl mx-auto px-4 py-10">
+        <a href="index.html" class="text-blue-600 text-sm font-semibold">&larr; 홈으로 돌아가기</a>
+        <h2 class="text-3xl font-bold mt-4 mb-6">👴 은퇴 자금 인출 전략 시뮬레이터</h2>
 
-<body style="font-family:Arial;max-width:800px;margin:auto;padding:20px;">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">은퇴 시점 총 자산 (원)</label>
+                <input type="number" id="retireAsset" value="1000000000" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">초기 연간 희망 생활비 (원)</label>
+                <input type="number" id="annualSpend" value="40000000" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">은퇴 자산 연간 기대수익률 (%)</label>
+                <input type="number" id="retireReturn" value="6" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">예상 연간 물가상승률 (%)</label>
+                <input type="number" id="inflationRate" value="2.5" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+        </div>
 
-<h1>Retirement Calculator</h1>
+        <button onclick="simulateRetirement()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition-colors mb-10">노후 자금 생존 기간 시뮬레이션</button>
 
-<p>Estimate how much money you need for retirement.</p>
+        <div id="retireResultSection" class="hidden bg-white p-6 rounded-2xl shadow-xs border border-gray-200 mb-10">
+            <h3 class="text-xl font-bold mb-4">📈 자산 고갈 시점 분석 리포트</h3>
+            <p class="text-xl font-bold text-indigo-600 mb-6">자산 유지 가능 기간: <span id="durations">0</span></p>
+            <div class="w-full h-64 md:h-96">
+                <canvas id="retireChart"></canvas>
+            </div>
+        </div>
 
-<hr>
+        <hr class="border-gray-200 my-10">
 
-<input id="amount" placeholder="Current Savings"><br><br>
-<input id="rate" placeholder="Annual Return %"><br><br>
-<input id="years" placeholder="Years"><br><br>
+        <article class="prose max-w-none text-gray-600 leading-relaxed">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">💡 은퇴 후 자산을 영구히 유지하는 인출 전략(SWR)</h3>
+            <p class="mb-4">모으는 것보다 중요한 것이 안전하게 쓰는 것입니다. 은퇴 학계에서는 이를 **안전인출률(Safe Withdrawal Rate, SWR)**이라고 부릅니다. 은퇴 생활의 가장 큰 두 가지 적은 '자산의 변동성'과 '물가 상승(인플레이션)'입니다. 은퇴 첫해에 정한 생활비는 매년 물가상승률만큼 늘어나야 동일한 생활 수준을 유지할 수 있기 때문에, 자산의 운용 수익률이 물가상승률보다 낮거나 자산 인출 속도가 너무 빠르면 은퇴 중반 이후 자산이 급격히 꺾이는 '수확 체감의 덫'에 빠지게 됩니다.</p>
+        </article>
+    </div>
 
-<button onclick="calc()">Calculate</button>
+    <script>
+        let retireChart = null;
+        function simulateRetirement() {
+            let balance = parseFloat(document.getElementById('retireAsset').value);
+            let spend = parseFloat(document.getElementById('annualSpend').value);
+            const r = parseFloat(document.getElementById('retireReturn').value) / 100;
+            const inf = parseFloat(document.getElementById('inflationRate').value) / 100;
 
-<h2 id="result"></h2>
+            let years = 0;
+            let labels = ['은퇴기점'];
+            let balanceData = [balance];
 
-<script>
-function calc() {
-  let p = parseFloat(document.getElementById("amount").value);
-  let r = parseFloat(document.getElementById("rate").value) / 100;
-  let t = parseFloat(document.getElementById("years").value);
+            while (balance > 0 && years < 50) {
+                years++;
+                // 자산 굴리기
+                balance = balance * (1 + r);
+                // 생활비 인출
+                balance -= spend;
+                // 다음 해 생활비는 물가상승률 반영해 증가
+                spend = spend * (1 + inf);
 
-  let result = p * Math.pow(1 + r, t);
+                labels.push(`${years}년후`);
+                balanceData.push(Math.max(0, Math.round(balance)));
 
-  document.getElementById("result").innerText =
-    "Future Value: " + result.toFixed(0);
-}
-</script>
+                if(balance <= 0) break;
+            }
 
+            document.getElementById('durations').innerText = balance > 0 && years >= 50 ? "50년 이상 (안전 자산 유지)" : `${years}년 뒤 고갈 위험`;
+            document.getElementById('retireResultSection').classList.remove('hidden');
+
+            if (retireChart) { retireChart.destroy(); }
+            const ctx = document.getElementById('retireChart').getContext('2d');
+            retireChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '노후 잔여 자산',
+                        data: balanceData,
+                        borderColor: '#4F46E5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        fill: true
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+    </script>
 </body>
 </html>
