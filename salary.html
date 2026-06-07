@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Salary Calculator</title>
+<meta name="description" content="Convert salary to monthly and hourly income.">
+
+</head>
+
+<body style="font-family:Arial;max-width:800px;margin:auto;padding:20px;">
+
+<h1>Salary Calculator</h1>
+
+<p>Convert your salary into monthly or hourly income.</p>
+
+<hr>
+
+<input id="amount" placeholder="Annual Salary"><br><br>
+
+<button onclick="calc()">Calculate</button>
+
+<h2 id="result"></h2>
+
+<script>
+function calc() {
+  let s = parseFloat(document.getElementById("amount").value);
+
+  let monthly = s / 12;
+
+  document.getElementById("result").innerText =
+    "Monthly Income: " + monthly.toFixed(0);
+}
+</script>
+
+</body>
+</html>
