@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Dividend Calculator</title>
+
+<meta name="description" content="Calculate your expected dividend income from stock investments.">
+
+</head>
+
+<body style="font-family:Arial;max-width:800px;margin:auto;padding:20px;">
+
+<h1>Dividend Calculator</h1>
+
+<p>
+Estimate how much dividend income you can earn from your stock investments.
+</p>
+
+<hr>
+
+<label>Investment Amount</label><br>
+<input id="amount" placeholder="e.g. 10000000"><br><br>
+
+<label>Dividend Yield (%)</label><br>
+<input id="yield" placeholder="e.g. 4"><br><br>
+
+<button onclick="calc()">Calculate</button>
+
+<h2 id="result"></h2>
+
+<script>
+function calc() {
+  let money = parseFloat(document.getElementById("amount").value);
+  let y = parseFloat(document.getElementById("yield").value) / 100;
+
+  if (!money || !y) {
+    document.getElementById("result").innerText = "Fill all fields";
+    return;
+  }
+
+  let yearly = money * y;
+  let monthly = yearly / 12;
+
+  document.getElementById("result").innerText =
+    "Yearly Dividend: " + yearly.toFixed(0) + 
+    " | Monthly: " + monthly.toFixed(0);
+}
+</script>
+
+</body>
+</html>
