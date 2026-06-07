@@ -1,80 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Finance Calculator Hub</title>
-
-<meta name="description" content="Free financial calculators for loans, savings, investments, retirement, dividends, tax, and FIRE planning.">
-
-<!-- 🔥 Google AdSense 코드 (이거 핵심) -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6866596388873889"
-     crossorigin="anonymous"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스마트 자산 관리 툴킷 | 경제적 자유를 위한 계산기</title>
+    <meta name="description" content="재테크의 시작, 연봉 실수령액부터 적금 복리, 주택담보대출, FIRE족 은퇴 시뮬레이션까지 모든 금융 계산기를 한곳에서 이용하세요.">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
+<body class="bg-gray-50 text-gray-900 font-sans">
 
-<body style="font-family:Arial;max-width:900px;margin:auto;padding:20px;">
+    <header class="bg-white shadow-xs border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-blue-600">💸 재테크 계산기 마스터</h1>
+            <span class="text-xs bg-blue-100 text-blue-800 font-medium px-2.5 py-0.5 rounded-full">2026 최신 개정판</span>
+        </div>
+    </header>
 
-<h1>Finance Calculator Hub</h1>
+    <main class="max-w-6xl mx-auto px-4 py-10">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-gray-900">당신의 경제적 자유(FIRE)를 위한 나침반</h2>
+            <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">복리 계산부터 대출 상환 스케줄, 세금 시뮬레이션까지 정밀하게 계산해 드립니다.</p>
+        </div>
 
-<p>
-Loan calculator, mortgage calculator, savings calculator, investment calculator, dividend calculator, FIRE calculator.
-</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="text-2xl mb-3">📈</div>
+                <h3 class="text-lg font-bold mb-2">적금 & 복리 계산기</h3>
+                <p class="text-gray-600 text-sm mb-4">매월 꾸준히 모은 돈이 복리 효과를 만나 우상향하는 자산 그래프를 눈으로 확인하세요.</p>
+                <a href="savings.html" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800">이동하기 &rarr;</a>
+            </div>
 
-<hr>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="text-2xl mb-3">🏠</div>
+                <h3 class="text-lg font-bold mb-2">주택담보대출 계산기</h3>
+                <p class="text-gray-600 text-sm mb-4">원리금균등, 원금균등 상환 방식별 매월 납부해야 하는 이자와 상세 스케줄을 제공합니다.</p>
+                <a href="mortgage.html" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800">이동하기 &rarr;</a>
+            </div>
 
-<h2>Available Calculators</h2>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="text-2xl mb-3">💵</div>
+                <h3 class="text-lg font-bold mb-2">배당금 계산기</h3>
+                <p class="text-gray-600 text-sm mb-4">목표로 하는 월 배당 소득을 얻기 위해 필요한 주식 총자산과 포트폴리오를 시뮬레이션합니다.</p>
+                <a href="dividend.html" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800">이동하기 &rarr;</a>
+            </div>
 
-<ul>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="text-2xl mb-3">🔥</div>
+                <h3 class="text-lg font-bold mb-2">FIRE족 은퇴 계산기</h3>
+                <p class="text-gray-600 text-sm mb-4">4% 법칙을 기반으로 조기 은퇴를 위해 필요한 목표 자산과 달성 가능 일정을 산출합니다.</p>
+                <a href="fire.html" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800">이동하기 &rarr;</a>
+            </div>
 
-<li>
-  <a href="loan.html">Loan Calculator</a>
-  <div>Calculate monthly loan payments and total interest.</div>
-</li>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="text-2xl mb-3">💳</div>
+                <h3 class="text-lg font-bold mb-2">일반 대출 계산기</h3>
+                <p class="text-gray-600 text-sm mb-4">신용대출 및 마이너스 통장 등 일반 대출 상품의 이자 비용과 상환 방식을 비교합니다.</p>
+                <a href="loan.html" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800">이동하기 &rarr;</a>
+            </div>
 
-<li>
-  <a href="mortgage.html">Mortgage Calculator</a>
-  <div>Estimate home loan payments.</div>
-</li>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="text-2xl mb-3">📊</div>
+                <h3 class="text-lg font-bold mb-2">세금 & 연봉 계산기</h3>
+                <p class="text-gray-600 text-sm mb-4">국민연금, 건강보험료 등 공제액을 제외한 실제 통장에 꽂히는 실수령액과 소득세를 계산합니다.</p>
+                <a href="salary.html" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800">이동하기 &rarr;</a>
+            </div>
 
-<li>
-  <a href="savings.html">Savings Calculator</a>
-  <div>Calculate savings growth over time.</div>
-</li>
+        </div>
+    </main>
 
-<li>
-  <a href="retirement.html">Retirement Calculator</a>
-  <div>Plan your retirement savings.</div>
-</li>
-
-<li>
-  <a href="dividend.html">Dividend Calculator</a>
-  <div>Estimate dividend income from stocks.</div>
-</li>
-
-<li>
-  <a href="salary.html">Salary Calculator</a>
-  <div>Convert salary to hourly/monthly income.</div>
-</li>
-
-<li>
-  <a href="tax.html">Tax Calculator</a>
-  <div>Estimate income tax.</div>
-</li>
-
-<li>
-  <a href="fire.html">FIRE Calculator</a>
-  <div>Financial independence calculator.</div>
-</li>
-
-</ul>
-
-<hr>
-
-<p>
-Free financial tools for loans, investing, savings, and retirement planning.
-</p>
-
+    <footer class="bg-white border-t border-gray-200 mt-20 py-8">
+        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>&copy; 2026 재테크 계산기 마스터. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
