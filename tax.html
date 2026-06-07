@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Tax Calculator</title>
+<meta name="description" content="Estimate your income tax and net salary.">
+
+</head>
+
+<body style="font-family:Arial;max-width:800px;margin:auto;padding:20px;">
+
+<h1>Tax Calculator</h1>
+
+<p>Estimate approximate tax and net income.</p>
+
+<hr>
+
+<label>Income</label><br>
+<input id="income"><br><br>
+
+<button onclick="calc()">Calculate</button>
+
+<h2 id="result"></h2>
+
+<script>
+function calc() {
+  let i = parseFloat(document.getElementById("income").value);
+
+  let tax = i * 0.2; // 단순 20% 가정
+  let net = i - tax;
+
+  document.getElementById("result").innerText =
+    "Net Income: " + net.toFixed(0) + " / Tax: " + tax.toFixed(0);
+}
+</script>
+
+</body>
+</html>
