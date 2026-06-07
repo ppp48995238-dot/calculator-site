@@ -1,53 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Dividend Calculator</title>
-
-<meta name="description" content="Calculate your expected dividend income from stock investments.">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배당금 계산기 | 목표 월세 수입 시뮬레이션</title>
+    <meta name="description" content="목표로 하는 월 배당 소득을 얻기 위해 필요한 총 투자 자산과 종목별 배당률 시뮬레이션을 시각적 차트로 확인하세요.">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div class="max-w-4xl mx-auto px-4 py-10">
+        <a href="index.html" class="text-blue-600 text-sm font-semibold">&larr; 홈으로 돌아가기</a>
+        <h2 class="text-3xl font-bold mt-4 mb-6">💵 월 배당금 수입 계산기</h2>
 
-<body style="font-family:Arial;max-width:800px;margin:auto;padding:20px;">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">목표 월 배당금 (원)</label>
+                <input type="number" id="targetMonthly" value="2000000" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">예상 평균 연 배당수익률 (%)</label>
+                <input type="number" step="0.1" id="dividendRate" value="5.0" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+        </div>
 
-<h1>Dividend Calculator</h1>
+        <button onclick="calculateDividend()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-colors mb-10">필요한 투자 자산 계산하기</button>
 
-<p>
-Estimate how much dividend income you can earn from your stock investments.
-</p>
+        <div id="divResultSection" class="hidden bg-white p-6 rounded-2xl shadow-xs border border-gray-200 mb-10">
+            <h3 class="text-xl font-bold mb-4">📊 배당 포트폴리오 목표</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div class="space-y-3">
+                    <p class="text-lg">목표 연 배당금: <span id="targetAnnual" class="font-bold text-gray-900">0</span>원</p>
+                    <p class="text-xl text-blue-600 font-bold">필요한 총 주식 자산: <span id="requiredCapital">0</span>원</p>
+                    <p class="text-xs text-gray-400 mt-2">* 배당소득세(15.4%)를 고려하지 않은 세전 금액입니다.</p>
+                </div>
+                <div class="w-full h-48 flex justify-center">
+                    <canvas id="dividendChart"></canvas>
+                </div>
+            </div>
+        </div>
 
-<hr>
+        <div class="bg-blue-50 border border-blue-200 p-4 rounded-xl mb-10 flex justify-between items-center">
+            <div>
+                <p class="text-blue-800 font-bold text-sm">📈 미국 고배당 주식 모으기, 어떤 계좌가 유리할까?</p>
+                <p class="text-blue-700 text-xs mt-1">해외 주식 수수료 우대 및 환전 우대 혜택을 실시간으로 확인해 보세요.</p>
+            </div>
+            <a href="#" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-2 px-4 rounded-lg inline-block">증권사 혜택 비교</a>
+        </div>
 
-<label>Investment Amount</label><br>
-<input id="amount" placeholder="e.g. 10000000"><br><br>
+        <hr class="border-gray-200 my-10">
 
-<label>Dividend Yield (%)</label><br>
-<input id="yield" placeholder="e.g. 4"><br><br>
+        <article class="prose max-w-none text-gray-600 leading-relaxed">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">💡 배당주 투자로 만드는 제2의 월급 흐름</h3>
+            <p class="mb-4">매달 통장에 꼬박꼬박 꽂히는 배당금 수입은 현금흐름 측면에서 부동산 월세 수입과 매우 유사합니다. 오히려 대출 이자 부담이나 세입자 관리, 부동산 중개 수수료가 전혀 들지 않는다는 점에서 1인 자산가들에게 가장 완벽한 패시브 인컴(Passive Income)으로 꼽힙니다. 특히 미국 주식 시장에는 분기 배당뿐만 아니라 매달 배당을 지급하는 고배당 ETF(ex: JEPI, SCHD 등)와 월배당 리츠 상품이 활성화되어 있어 정교한 월급 현금흐름을 설계하기 좋습니다.</p>
+            <p class="mb-4">배당 투자를 설계할 때 핵심은 단순히 '배당률이 높은 기업'만 찾는 것이 아니라, 매년 배당금을 늘려주는 **'배당성장주'**를 포트폴리오에 편입하는 것입니다. 배당성장주는 당장의 배당률이 2~3%로 낮아 보일지라도 시간이 흐르며 기업이 성장함에 따라 내가 취득한 원금 대비 배당률(Yield on Cost)이 기하급수적으로 올라가며, 주가 상승에 따른 시세 차익까지 동시에 누릴 수 있는 강력한 장점이 있습니다.</p>
+        </article>
+    </div>
 
-<button onclick="calc()">Calculate</button>
+    <script>
+        let divChart = null;
+        function calculateDividend() {
+            const monthly = parseFloat(document.getElementById('targetMonthly').value);
+            const rate = parseFloat(document.getElementById('dividendRate').value) / 100;
+            
+            const annual = monthly * 12;
+            const capital = annual / rate;
 
-<h2 id="result"></h2>
+            document.getElementById('targetAnnual').innerText = Math.round(annual).toLocaleString();
+            document.getElementById('requiredCapital').innerText = Math.round(capital).toLocaleString();
+            document.getElementById('divResultSection').classList.remove('hidden');
 
-<script>
-function calc() {
-  let money = parseFloat(document.getElementById("amount").value);
-  let y = parseFloat(document.getElementById("yield").value) / 100;
-
-  if (!money || !y) {
-    document.getElementById("result").innerText = "Fill all fields";
-    return;
-  }
-
-  let yearly = money * y;
-  let monthly = yearly / 12;
-
-  document.getElementById("result").innerText =
-    "Yearly Dividend: " + yearly.toFixed(0) + 
-    " | Monthly: " + monthly.toFixed(0);
-}
-</script>
-
+            if (divChart) { divChart.destroy(); }
+            const ctx = document.getElementById('dividendChart').getContext('2d');
+            divChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['목표 연 배당수입', '필요 총 자산 비중'],
+                    datasets: [{
+                        data: [annual, capital - annual],
+                        backgroundColor: ['#2563EB', '#E5E7EB'],
+                        hoverOffset: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+    </script>
 </body>
 </html>
