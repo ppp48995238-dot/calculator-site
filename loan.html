@@ -1,46 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Loan Calculator</title>
-
-<meta name="description" content="Calculate monthly loan payments and interest easily.">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일반 대출 계산기 | 상환 방식별 이자 비교</title>
+    <meta name="description" content="신용대출, 마이너스 통장 등 일반 대출의 만기일시상환 및 원금균등상환 방식에 따른 이자 비용과 회차별 스케줄을 비교해 보세요.">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div class="max-w-4xl mx-auto px-4 py-10">
+        <a href="index.html" class="text-blue-600 text-sm font-semibold">&larr; 홈으로 돌아가기</a>
+        <h2 class="text-3xl font-bold mt-4 mb-6">💳 일반 대출 이자 계산기</h2>
 
-<body style="font-family:Arial;max-width:800px;margin:auto;padding:20px;">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">대출 원금 (원)</label>
+                <input type="number" id="genLoanAmount" value="50000000" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">연 이자율 (%)</label>
+                <input type="number" step="0.1" id="genLoanRate" value="5.5" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">대출 기간 (개월)</label>
+                <input type="number" id="genLoanMonths" value="12" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+        </div>
 
-<h1>Loan Calculator</h1>
+        <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200 mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">상환 방식 선택</label>
+            <div class="flex gap-6">
+                <label class="inline-flex items-center"><input type="radio" name="repayType" value="bullet" checked class="mr-2"> 만기일시상환</label>
+                <label class="inline-flex items-center"><input type="radio" name="repayType" value="equalPrincipal" class="mr-2"> 원금균등분할상환</label>
+            </div>
+        </div>
 
-<p>
-Calculate your monthly loan payment, total interest, and repayment amount.
-</p>
+        <button onclick="calculateGeneralLoan()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-xl transition-colors mb-10">대출 상환 비용 계산하기</button>
 
-<hr>
+        <div id="genLoanResultSection" class="hidden bg-white p-6 rounded-2xl shadow-xs border border-gray-200 mb-10">
+            <h3 class="text-xl font-bold mb-4">📊 대출 비용 분석 결과</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div class="space-y-3 text-sm">
+                    <p class="text-base">총 원금: <span id="resPrincipal" class="font-bold">0</span>원</p>
+                    <p class="text-base text-red-500">총 납부 이자: <span id="resTotalInterest" class="font-bold">0</span>원</p>
+                    <p class="text-lg text-blue-600 font-bold border-t pt-2">총 상환 금액: <span id="resTotalRepay">0</span>원</p>
+                </div>
+                <div class="w-full h-48 flex justify-center">
+                    <canvas id="genLoanChart"></canvas>
+                </div>
+            </div>
+        </div>
 
-<input id="amount" placeholder="Loan Amount"><br><br>
-<input id="rate" placeholder="Interest Rate (%)"><br><br>
-<input id="years" placeholder="Years"><br><br>
+        <hr class="border-gray-200 my-10">
 
-<button onclick="calc()">Calculate</button>
+        <article class="prose max-w-none text-gray-600 leading-relaxed">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">💡 만기일시상환과 분할상환, 나에게 맞는 대출 선택법</h3>
+            <p class="mb-4">신용대출이나 소액 대출을 이용할 때 가장 먼저 결정해야 하는 것이 바로 상환 방식입니다. 많은 사람들이 단순히 금리 조건만 보고 대출을 선택하지만, 상환 방식에 따라 매달 지출되는 고정 비용과 최종적으로 은행에 기부하게 되는 '총이자 비용'에는 엄청난 차이가 발생합니다.</p>
+            <p class="mb-4"><strong>만기일시상환</strong>은 대출 기간 동안에는 매달 오직 '이자'만 납부하다가, 대출 만기일에 원금을 일시에 전액 상환하는 방식입니다. 마이너스 통장이 대표적인 형태입니다. 매월 나가는 원금 상환 부담이 전혀 없기 때문에 단기적으로 현금흐름을 확보하기에는 매우 유리하지만, 대출 전 기간 동안 원금이 그대로 살아있기 때문에 이자 총액이 가장 비싸다는 치명적인 단점이 있습니다. 자산 회전이 빠른 투자 자금이나 단기 유동성 확보용으로 적합합니다.</p>
+        </article>
+    </div>
 
-<h2 id="result"></h2>
+    <script>
+        let genLoanChart = null;
+        function calculateGeneralLoan() {
+            const principal = parseFloat(document.getElementById('genLoanAmount').value);
+            const annualRate = parseFloat(document.getElementById('genLoanRate').value) / 100;
+            const months = parseInt(document.getElementById('genLoanMonths').value);
+            const repayType = document.querySelector('input[name="repayType"]:checked').value;
 
-<script>
-function calc() {
-  let p = parseFloat(document.getElementById("amount").value);
-  let r = parseFloat(document.getElementById("rate").value) / 100 / 12;
-  let n = parseFloat(document.getElementById("years").value) * 12;
+            let totalInterest = 0;
 
-  let x = Math.pow(1 + r, n);
-  let monthly = (p * x * r) / (x - 1);
+            if (repayType === 'bullet') {
+                totalInterest = principal * (annualRate / 12) * months;
+            } else {
+                // 원금균등상환 이자 총합 계산
+                const monthlyPrincipal = principal / months;
+                let balance = principal;
+                for (let i = 0; i < months; i++) {
+                    totalInterest += balance * (annualRate / 12);
+                    balance -= monthlyPrincipal;
+                }
+            }
 
-  document.getElementById("result").innerText =
-    "Monthly Payment: " + monthly.toFixed(0);
-}
-</script>
+            const totalRepay = principal + totalInterest;
 
+            document.getElementById('resPrincipal').innerText = Math.round(principal).toLocaleString() + '원';
+            document.getElementById('resTotalInterest').innerText = Math.round(totalInterest).toLocaleString() + '원';
+            document.getElementById('resTotalRepay').innerText = Math.round(totalRepay).toLocaleString() + '원';
+            document.getElementById('genLoanResultSection').classList.remove('hidden');
+
+            if (genLoanChart) { genLoanChart.destroy(); }
+            const ctx = document.getElementById('genLoanChart').getContext('2d');
+            genLoanChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['원금', '총 이자 비용'],
+                    datasets: [{
+                        data: [principal, totalInterest],
+                        backgroundColor: ['#64748B', '#EF4444']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+    </script>
 </body>
 </html>
