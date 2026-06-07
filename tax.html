@@ -1,40 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Tax Calculator</title>
-<meta name="description" content="Estimate your income tax and net salary.">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>재테크 세금 계산기 | 해외주식 양도세 및 금융소득종합과세</title>
+    <meta name="description" content="해외주식 매매차익에 대한 양도소득세와 배당/이자 소득에 대한 금융소득종합과세 기준을 쉽고 정확하게 계산해 보세요.">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div class="max-w-4xl mx-auto px-4 py-10">
+        <a href="index.html" class="text-blue-600 text-sm font-semibold">&larr; 홈으로 돌아가기</a>
+        <h2 class="text-3xl font-bold mt-4 mb-6">📊 재테크 투자 세금 계산기</h2>
 
-<body style="font-family:Arial;max-width:800px;margin:auto;padding:20px;">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <h3 class="font-bold text-lg mb-3 text-blue-600">🇺🇸 해외주식 양도소득세</h3>
+                <label class="block text-sm font-medium text-gray-700 mb-2">연간 총 매매 차익 (수익-손실, 원)</label>
+                <input type="number" id="stockGain" value="10000000" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <h3 class="font-bold text-lg mb-3 text-emerald-600">💵 연간 총 금융소득 (이자/배당)</h3>
+                <label class="block text-sm font-medium text-gray-700 mb-2">연간 총 배당 및 이자 수입 (원)</label>
+                <input type="number" id="financeIncome" value="25000000" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-emerald-500">
+            </div>
+        </div>
 
-<h1>Tax Calculator</h1>
+        <button onclick="calculateTax()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-xl transition-colors mb-10">투자 세금 시뮬레이션 실행</button>
 
-<p>Estimate approximate tax and net income.</p>
+        <div id="taxResultSection" class="hidden bg-white p-6 rounded-2xl shadow-xs border border-gray-200 mb-10">
+            <h3 class="text-xl font-bold mb-4">💸 예상 세금 명세 리포트</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div class="p-4 bg-blue-50 rounded-xl">
+                        <p class="font-bold text-blue-900">해외주식 양도세 결과</p>
+                        <p class="text-sm mt-1">기본 공제액: 2,500,000원</p>
+                        <p class="text-lg font-extrabold text-blue-600 mt-2">예상 세금(22%): <span id="stockTax">0</span>원</p>
+                    </div>
+                    <div class="p-4 bg-emerald-50 rounded-xl">
+                        <p class="font-bold text-emerald-900">금융소득 종합과세 여부</p>
+                        <p class="text-sm mt-1">기준점: 연 2,000만 원 초과 여부</p>
+                        <p class="text-lg font-extrabold text-emerald-600 mt-2">대상 여부: <span id="isTarget">대상 아님</span></p>
+                        <p class="text-xs text-gray-500 mt-1" id="taxTip">*2,000만 원 이하 소득은 15.4% 원천징수로 분리과세 종결됩니다.</p>
+                    </div>
+                </div>
+                <div class="w-full h-56 flex justify-center">
+                    <canvas id="taxChart"></canvas>
+                </div>
+            </div>
+        </div>
 
-<hr>
+        <hr class="border-gray-200 my-10">
 
-<label>Income</label><br>
-<input id="income"><br><br>
+        <article class="prose max-w-none text-gray-600 leading-relaxed">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">💡 스마트한 투자자가 반드시 알아야 할 필수 자산 세법</h3>
+            <p class="mb-4">성공적인 투자는 수익률을 올리는 것만큼이나 나가는 세금을 줄이는 '절세 전략'에서 결정됩니다. 특히 서학개미라 불리는 미국 주식 투자자들이 가장 먼저 맞닥뜨리는 세금이 바로 **해외주식 양도소득세**입니다. 해외주식은 매년 1월 1일부터 12월 31일까지 발생한 수익과 손실을 합산(손익통산)하여, 인당 연간 **250만 원의 기본 공제**를 적용한 나머지 차익에 대해 결제일 기준으로 **22%(양도세 20% + 지방소득세 2%)**의 세율을 매겨 이듬해 5월에 자진 신고 및 납부해야 합니다.</p>
+            <p class="mb-4">또 다른 중요한 축은 **금융소득종합과세**입니다. 개인이 한 해 동안 올린 이자소득과 배당소득의 합계액이 **연간 2,000만 원을 초과**하게 되면, 초과 분에 대해서는 기존의 원천징수 세율(15.4%)이 아닌 다른 근로소득이나 사업소득 등과 합산하여 최고 45%의 누진세율을 적용받는 '종합과세' 대상이 됩니다. 금융소득종합과세 대상자가 되면 세금 부담이 늘어날 뿐만 아니라 지역가입자의 경우 건강보험료 산정 시 자산 점수가 크게 뛰어 건보료 폭탄을 맞을 수 있으므로, ISA(개인종합자산관리계좌)나 비과세/분리과세 상품을 적극 활용하여 명의를 분산하는 전략이 절대적으로 필요합니다.</p>
+        </article>
+    </div>
 
-<button onclick="calc()">Calculate</button>
+    <script>
+        let taxChart = null;
+        function calculateTax() {
+            const stockGain = parseFloat(document.getElementById('stockGain').value);
+            const financeIncome = parseFloat(document.getElementById('financeIncome').value);
 
-<h2 id="result"></h2>
+            // 1. 해외주식 양도세 계산
+            const stockTaxBase = stockGain - 2500000;
+            const stockTax = stockTaxBase > 0 ? stockTaxBase * 0.22 : 0;
 
-<script>
-function calc() {
-  let i = parseFloat(document.getElementById("income").value);
+            // 2. 금융소득종합과세 판정
+            const isTarget = financeIncome > 20000000;
+            
+            document.getElementById('stockTax').innerText = Math.round(stockTax).toLocaleString();
+            document.getElementById('isTarget').innerText = isTarget ? "⚠️ 종합과세 대상" : "✅ 분리과세 대상";
+            if(isTarget) {
+                document.getElementById('isTarget').className = "text-lg font-extrabold text-red-600 mt-2";
+                document.getElementById('taxTip').innerText = "*2,000만 원을 초과한 금액은 다른 소득(근로/사업)과 합산되어 누진과세됩니다.";
+            } else {
+                document.getElementById('isTarget').className = "text-lg font-extrabold text-emerald-600 mt-2";
+                document.getElementById('taxTip').innerText = "*2,000만 원 이하 소득은 15.4% 원천징수로 분리과세 종결됩니다.";
+            }
+            
+            document.getElementById('taxResultSection').classList.remove('hidden');
 
-  let tax = i * 0.2; // 단순 20% 가정
-  let net = i - tax;
-
-  document.getElementById("result").innerText =
-    "Net Income: " + net.toFixed(0) + " / Tax: " + tax.toFixed(0);
-}
-</script>
-
+            if (taxChart) { taxChart.destroy(); }
+            const ctx = document.getElementById('taxChart').getContext('2d');
+            taxChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['해외주식 예상세금', '연간 금융소득규모'],
+                    datasets: [{
+                        label: '금액 (원)',
+                        data: [stockTax, financeIncome],
+                        backgroundColor: ['#2563EB', '#10B981']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+    </script>
 </body>
 </html>
