@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Savings Calculator</title>
+<meta name="description" content="Calculate how your savings grow with interest over time.">
+
+</head>
+
+<body style="font-family:Arial;max-width:800px;margin:auto;padding:20px;">
+
+<h1>Savings Calculator</h1>
+
+<p>Calculate future value of your savings with compound interest.</p>
+
+<hr>
+
+<label>Initial Amount</label><br>
+<input id="amount"><br><br>
+
+<label>Annual Interest (%)</label><br>
+<input id="rate"><br><br>
+
+<label>Years</label><br>
+<input id="years"><br><br>
+
+<button onclick="calc()">Calculate</button>
+
+<h2 id="result"></h2>
+
+<script>
+function calc() {
+  let p = parseFloat(document.getElementById("amount").value);
+  let r = parseFloat(document.getElementById("rate").value) / 100;
+  let t = parseFloat(document.getElementById("years").value);
+
+  let result = p * Math.pow(1 + r, t);
+
+  document.getElementById("result").innerText =
+    "Future Value: " + result.toFixed(0);
+}
+</script>
+
+</body>
+</html>
