@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loan Calculator</title>
+</head>
+
+<body style="font-family:Arial;max-width:700px;margin:auto;padding:20px;">
+
+<h1>Loan Calculator</h1>
+
+<p>Loan Amount ($)</p>
+<input id="amount" type="number">
+
+<p>Annual Interest Rate (%)</p>
+<input id="rate" type="number">
+
+<p>Loan Term (Years)</p>
+<input id="years" type="number">
+
+<br><br>
+
+<button onclick="calculateLoan()">Calculate</button>
+
+<h2 id="result"></h2>
+
+<hr>
+
+<h2>What is a Loan Calculator?</h2>
+
+<p>
+A loan calculator helps estimate monthly loan payments based on
+the loan amount, interest rate, and repayment period.
+</p>
+
+<script>
+function calculateLoan() {
+
+let P = parseFloat(document.getElementById("amount").value);
+let annualRate = parseFloat(document.getElementById("rate").value) / 100;
+let years = parseFloat(document.getElementById("years").value);
+
+let r = annualRate / 12;
+let n = years * 12;
+
+let payment = (P * r) / (1 - Math.pow(1 + r, -n));
+
+document.getElementById("result").innerHTML =
+"Monthly Payment: $" + payment.toFixed(2);
+
+}
+</script>
+
+</body>
+</html>
