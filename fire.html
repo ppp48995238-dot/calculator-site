@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>FIRE Calculator</title>
+<meta name="description" content="Calculate financial independence and early retirement goals.">
+
+</head>
+
+<body style="font-family:Arial;max-width:800px;margin:auto;padding:20px;">
+
+<h1>FIRE Calculator</h1>
+
+<p>Estimate how much money you need to retire early.</p>
+
+<hr>
+
+<label>Annual Expenses</label><br>
+<input id="expense"><br><br>
+
+<button onclick="calc()">Calculate</button>
+
+<h2 id="result"></h2>
+
+<script>
+function calc() {
+  let e = parseFloat(document.getElementById("expense").value);
+
+  let needed = e * 25; // 4% rule
+
+  document.getElementById("result").innerText =
+    "FIRE Target: " + needed.toFixed(0);
+}
+</script>
+
+</body>
+</html>
