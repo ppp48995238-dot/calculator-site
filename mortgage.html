@@ -1,43 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Mortgage Calculator</title>
-<meta name="description" content="Calculate home loan monthly payments and total interest.">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주택담보대출 계산기 | 매월 원리금 상환 스케줄표</title>
+    <meta name="description" content="주택담보대출 및 일반 대출의 원리금균등상환 일정을 회차별로 상세하게 확인하고 스마트한 부채 상환 계획을 세우세요.">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <div class="max-w-4xl mx-auto px-4 py-10">
+        <a href="index.html" class="text-blue-600 text-sm font-semibold">&larr; 홈으로 돌아가기</a>
+        <h2 class="text-3xl font-bold mt-4 mb-6">🏠 주택담보대출 상환 스케줄러</h2>
 
-<body style="font-family:Arial;max-width:800px;margin:auto;padding:20px;">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">대출 원금 (원)</label>
+                <input type="number" id="loanAmount" value="300000000" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">대출 금리 (연 %)</label>
+                <input type="number" step="0.01" id="loanRate" value="4.2" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-xs border border-gray-200">
+                <label class="block text-sm font-medium text-gray-700 mb-2">대출 기간 (년)</label>
+                <input type="number" id="loanYears" value="20" class="w-full border border-gray-300 p-2 rounded-lg focus:outline-blue-500">
+            </div>
+        </div>
 
-<h1>Mortgage Calculator</h1>
+        <button onclick="calculateLoan()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition-colors mb-10">매월 상환 내역 표 출력하기</button>
 
-<p>Estimate your monthly mortgage payments and total loan cost.</p>
+        <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl mb-10 flex justify-between items-center">
+            <div>
+                <p class="text-amber-800 font-bold text-sm">💡 혹시 더 낮은 금리의 대출 상품을 찾고 계신가요?</p>
+                <p class="text-amber-700 text-xs mt-1">1금융권 최저금리 한도 조회를 실시간으로 비교해 보세요.</p>
+            </div>
+            <a href="#" target="_blank" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-2 px-4 rounded-lg inline-block">금리 비교하기</a>
+        </div>
 
-<hr>
+        <div id="loanResultSection" class="hidden bg-white p-6 rounded-2xl shadow-xs border border-gray-200 overflow-x-auto mb-10">
+            <h3 class="text-xl font-bold mb-4">📋 회차별 상환 내역 (원리금균등방식)</h3>
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-gray-200 text-gray-500 text-sm">
+                        <th class="py-2">회차</th>
+                        <th class="py-2">월 상환액</th>
+                        <th class="py-2">원금 납입액</th>
+                        <th class="py-2">이자 납입액</th>
+                        <th class="py-2">대출 잔액</th>
+                    </tr>
+                </thead>
+                <tbody id="scheduleBody" class="text-sm text-gray-700 divide-y divide-gray-100">
+                    </tbody>
+            </table>
+        </div>
 
-<input id="amount" placeholder="Loan Amount"><br><br>
-<input id="rate" placeholder="Interest Rate"><br><br>
-<input id="years" placeholder="Years"><br><br>
+        <hr class="border-gray-200 my-10">
 
-<button onclick="calc()">Calculate</button>
+        <article class="prose max-w-none text-gray-600 leading-relaxed">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">💡 원리금균등 vs 원금균등 상환 방식 완벽 비교</h3>
+            <p class="mb-4">주택담보대출이나 거액의 신용대출을 실행할 때 어떤 상환 방식을 선택하느냐에 따라 최종적으로 은행에 지불하는 이자의 총액이 크게 달라집니다. 가장 대표적인 두 가지 방식인 원리금균등상환과 원금균등상환의 차이를 명확히 이해해야 내 현금흐름에 맞는 지출 계획을 세울 수 있습니다.</p>
+            <p class="mb-4"><strong>1. 원리금균등분할상환:</strong> 매달 은행에 갚아나가는 '원금+이자'의 합계 금액이 대출 만기까지 동일한 방식입니다. 대출 초기에는 이자의 비중이 높고 원금 상환 비중이 낮지만, 갈수록 원금 상환 속도가 빨라집니다. 매달 고정된 금액만 지출되므로 가계 자금 계획을 세우기 매우 편리하다는 장점이 있어 대부분의 대출자들이 가장 선호하는 방식입니다.</p>
+            <p class="mb-4"><strong>2. 원금균등분할상환:</strong> 매달 똑같은 액수의 '원금'을 까나가는 방식입니다. 이자는 남아있는 대출 잔액에 대해서만 부과되므로, 시간이 지날수록 매월 내야 하는 이자가 줄어들어 전체 상환 금액도 점점 줄어듭니다. 총이자 비용 측면에서는 원리금균등 방식보다 유리하지만, 대출 초기(1회차~만기 초기)에 매달 갚아야 하는 원리금 부담이 매우 크다는 단점이 있습니다.</p>
+        </article>
+    </div>
 
-<h2 id="result"></h2>
+    <script>
+        function calculateLoan() {
+            const principal = parseFloat(document.getElementById('loanAmount').value);
+            const annualRate = parseFloat(document.getElementById('loanRate').value) / 100;
+            const years = parseInt(document.getElementById('loanYears').value);
+            
+            const monthlyRate = annualRate / 12;
+            const totalMonths = years * 12;
 
-<script>
-function calc() {
-  let p = parseFloat(document.getElementById("amount").value);
-  let r = parseFloat(document.getElementById("rate").value) / 100 / 12;
-  let n = parseFloat(document.getElementById("years").value) * 12;
+            // 원리금 균등 상환액 공식
+            const monthlyPayment = (principal * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
+            
+            let balance = principal;
+            const tbody = document.getElementById('scheduleBody');
+            tbody.innerHTML = ''; // 초기화
 
-  let x = Math.pow(1 + r, n);
-  let monthly = (p * x * r) / (x - 1);
+            for (let i = 1; i <= totalMonths; i++) {
+                const interestPayment = balance * monthlyRate;
+                const principalPayment = monthlyPayment - interestPayment;
+                balance -= principalPayment;
 
-  document.getElementById("result").innerText =
-    "Monthly Payment: " + monthly.toFixed(0);
-}
-</script>
+                const row = `
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2.5 font-medium">${i}회차</td>
+                        <td class="py-2.5">${Math.round(monthlyPayment).toLocaleString()}원</td>
+                        <td class="py-2.5 text-emerald-600">${Math.round(principalPayment).toLocaleString()}원</td>
+                        <td class="py-2.5 text-red-500">${Math.round(interestPayment).toLocaleString()}원</td>
+                        <td class="py-2.5">${Math.max(0, Math.round(balance)).toLocaleString()}원</td>
+                    </tr>
+                `;
+                tbody.insertAdjacentHTML('beforeend', row);
+            }
 
+            document.getElementById('loanResultSection').classList.remove('hidden');
+        }
+    </script>
 </body>
 </html>
