@@ -1,40 +1,43 @@
-index.html
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Compound Interest Calculator</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finance Calculator Hub</title>
 </head>
-<body style="font-family:Arial;max-width:600px;margin:auto;padding:20px;">
 
-<h1>Compound Interest Calculator</h1>
+<body style="font-family:Arial;max-width:900px;margin:auto;padding:20px;">
 
-<p>Initial Amount ($)</p>
-<input id="principal" type="number">
+<h1>Finance Calculator Hub</h1>
 
-<p>Annual Interest Rate (%)</p>
-<input id="rate" type="number">
+<p>
+Free financial calculators for loans, investments, retirement planning,
+savings, dividends and more.
+</p>
 
-<p>Years</p>
-<input id="years" type="number">
+<hr>
 
-<br><br>
+<h2>Available Calculators</h2>
 
-<button onclick="calculate()">Calculate</button>
+<ul>
+<li><a href="loan.html">Loan Calculator</a></li>
+<li><a href="mortgage.html">Mortgage Calculator</a></li>
+<li><a href="savings.html">Savings Calculator</a></li>
+<li><a href="retirement.html">Retirement Calculator</a></li>
+<li><a href="dividend.html">Dividend Calculator</a></li>
+<li><a href="salary.html">Salary Calculator</a></li>
+<li><a href="tax.html">Tax Calculator</a></li>
+<li><a href="fire.html">FIRE Calculator</a></li>
+</ul>
 
-<h2 id="result"></h2>
+<hr>
 
-<script>
-function calculate() {
-    let p = parseFloat(document.getElementById('principal').value);
-    let r = parseFloat(document.getElementById('rate').value) / 100;
-    let y = parseFloat(document.getElementById('years').value);
+<h2>Why Use Financial Calculators?</h2>
 
-    let total = p * Math.pow((1 + r), y);
-
-    document.getElementById('result').innerHTML =
-        "Final Amount: $" + total.toFixed(2);
-}
-</script>
+<p>
+Financial calculators help people make better decisions about borrowing,
+saving, investing and retirement planning.
+</p>
 
 </body>
 </html>
