@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Retirement Calculator</title>
+<meta name="description" content="Plan how much you need for retirement savings.">
+
+</head>
+
+<body style="font-family:Arial;max-width:800px;margin:auto;padding:20px;">
+
+<h1>Retirement Calculator</h1>
+
+<p>Estimate how much money you need for retirement.</p>
+
+<hr>
+
+<input id="amount" placeholder="Current Savings"><br><br>
+<input id="rate" placeholder="Annual Return %"><br><br>
+<input id="years" placeholder="Years"><br><br>
+
+<button onclick="calc()">Calculate</button>
+
+<h2 id="result"></h2>
+
+<script>
+function calc() {
+  let p = parseFloat(document.getElementById("amount").value);
+  let r = parseFloat(document.getElementById("rate").value) / 100;
+  let t = parseFloat(document.getElementById("years").value);
+
+  let result = p * Math.pow(1 + r, t);
+
+  document.getElementById("result").innerText =
+    "Future Value: " + result.toFixed(0);
+}
+</script>
+
+</body>
+</html>
